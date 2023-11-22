@@ -50,6 +50,7 @@ body, html {
       
        <button onclick="sakt();">Sākt</button>
         <p id="demo"></p>
+        <img src="sirds.png" alt="sirds" width="500" height="333">
 
         <script>
         // no https://www.w3schools.com/howto/howto_js_countdown.asp 
@@ -77,13 +78,40 @@ body, html {
                     document.getElementById("demo").innerHTML = "Laiks beidzies";
                 }
             }
+            
         </script>
-    
-        var dziviba;
-        function dzive(){
-        }
-    
+        
+        <script>
+        let vards, nave, nepareizi, pareizi;
+        
       
+        
+            
+        
+        
+        function minamais(){
+            let izvele = worldList[Math.floor(Math.random()*worldList.length)];
+            vards = izvele;
+            nave = 9;
+            pareizi = [];
+            nepareizi = [];
+            atlikusi.innerText = nave;
+            wrondLetter.innerText = nepareizi;
+            
+            let html = "";
+            for (let i = 0; i < word.length; i++) {
+                 html += `<input type="text" disabled>`;
+                 input.innerHTML = html;
+        }
+    }
+     // https://www.codewithrandom.com/2023/05/07/word-guessing-game-in-javascript/
+     minamais();
+     
+        function parbaude(){
+            
+        }
+       </script> 
+    
       
       
       
