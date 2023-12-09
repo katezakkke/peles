@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>W3.CSS Template</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
-<style>
-body, html {
-  height: 100%;
-  text-align: center;
+    <title>W3.CSS Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
+    <style>
+        body, html {
+            height: 100%;
+            text-align: center;
             margin: 20px;
             margin-top: 100px;
-  font-family: "Inconsolata", sans-serif;
-}
-#wordContainer {
+            font-family: "Inconsolata", sans-serif;
+        }
+        #wordContainer {
             font-size: 24px;
             margin: 10px 0;
         }
@@ -35,243 +35,248 @@ body, html {
             font-size: 24px;
         }
 
-        
-
         p {
             text-align: center;
             font-size: 20px;
             margin-top: 5px;
         }
-.bgimg {
-  background-position: center;
-  background-size: cover;
-  background-image: url("/w3images/coffeehouse.jpg");
-  min-height: 75%;
-}
+        .bgimg {
+            background-position: center;
+            background-size: cover;
+            background-image: url("/w3images/coffeehouse.jpg");
+            min-height: 75%;
+        }
 
-.menu {
-  display: none;
-}
-</style>
+        .menu {
+            display: none;
+        }
+    </style>
 </head>
 <body onload="sakt()">
 
-<!-- Links (sit on top) -->
-<div class="w3-top">
-  <div class="w3-row w3-padding w3-black">
-    <div class="w3-col s3">
-      <a href="#" class="w3-button w3-block w3-black">SPĒLE</a>
+    <!-- Links (sit on top) -->
+    <div class="w3-top">
+        <div class="w3-row w3-padding w3-black">
+            <div class="w3-col s3">
+                <a href="#" class="w3-button w3-block w3-black">SPĒLE</a>
+            </div>
+            <div class="w3-col s3">
+                <a href="#about" class="w3-button w3-block w3-black">NOTEIKUMI</a>
+            </div>
+            <div class="w3-col s3">
+                <a href="#menu" class="w3-button w3-block w3-black">PAR MUMS</a>
+            </div>
+            <div class="w3-col s3">
+                <a href="#where" class="w3-button w3-block w3-black">REZULTĀTI</a>
+            </div>
+        </div>
     </div>
-    <div class="w3-col s3">
-      <a href="#about" class="w3-button w3-block w3-black">NOTEIKUMI</a>
-    </div>
-    <div class="w3-col s3">
-      <a href="#menu" class="w3-button w3-block w3-black">PAR MUMS</a>
-    </div>
-    <div class="w3-col s3">
-      <a href="#where" class="w3-button w3-block w3-black">REZULTĀTI</a>
-    </div>
-  </div>
-</div>
 
+    <!-- Header with image -->
+    <header class="bgimg w3-display-container w3-grayscale-min" id="home">
 
+        <h1>KAĶA DEVIŅAS DZĪVĪBAS</h1>
 
+        <p>MINAMAIS VĀRDS:</p>
+        <div id="wordContainer">
+            <!-- This is where the word will be displayed with stripes -->
+        </div>
+        <div id="heartsContainer">
+            <!-- Hearts will be dynamically added here -->
+        </div>
+        <br>
+        <label for="guessInput">TAVS MINĒJUMS:</label>
+        <input type="text" id="guessInput">
+        <button onclick="checkGuess()" id="checkButton">PĀRBAUDĪT</button>
+        <button onclick="startAgain()" id="startAgainButton" style="display:none;">Sākt no jauna</button>
 
-<!-- Header with image -->
-<header class="bgimg w3-display-container w3-grayscale-min" id="home">
-  
-    <h1>KAĶA DEVIŅAS DZĪVĪBAS</h1>
+        <p id="demo"></p>
 
-    <p>MINAMAIS VĀRDS:</p>
-    <div id="wordContainer">
-        <!-- This is where the word will be displayed with stripes -->
-    </div>
-    <div id="heartsContainer">
-        <!-- Hearts will be dynamically added here -->
-    </div>
-    <br>
-    <label for="guessInput">TAVS MINĒJUMS:</label>
-    <input type="text" id="guessInput">
-    <button onclick="checkGuess()">PĀRBAUDĪT</button>
+        <script>
+            var countDownDate, spele;
+            var wrongGuesses = 0;
 
-    <p id="demo"></p>
-
-    <script>
-        var countDownDate, spele;
-
-        function sakt() {
-            countDownDate = new Date().getTime();
-            spele = setInterval(skaita, 1000);
-        }
-
-        function skaita() {
-            let now = new Date().getTime();
-            let distance = now - countDownDate;
-            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("demo").innerHTML = minutes + "m " + seconds + "s ";
-
-            if (distance > 5000000) {
-                clearInterval(spele);
-                document.getElementById("demo").innerHTML = "Laiks beidzies";
+            function sakt() {
+                countDownDate = new Date().getTime();
+                spele = setInterval(skaita, 1000);
+                newRound(); // Start a new round when the page loads
             }
-        }
 
-        const words = ["apple", "banana", "orange", "grape", "kiwi"];
-        const randomIndex = Math.floor(Math.random() * words.length);
-        const targetWord = words[randomIndex].toLowerCase();
-        let displayedWord = "_".repeat(targetWord.length);
-        let remainingHearts = 9;
+            function skaita() {
+                let now = new Date().getTime();
+                let distance = now - countDownDate;
+                let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById("wordContainer").innerHTML = displayedWord
-            .split("")
-            .map(letter => `<span class="letterStripe">${letter}</span>`)
-            .join("");
+                document.getElementById("demo").innerHTML = minutes + "m " + seconds + "s ";
 
-        updateHearts();
+                if (distance > 60000 || wrongGuesses >= 9) {
+                    clearInterval(spele);
+                    document.getElementById("demo").innerHTML = "Laiks beidzies";
+                    document.getElementById("checkButton").disabled = true;
+                    document.getElementById("guessInput").disabled = true;
+                    document.getElementById("startAgainButton").style.display = "block";
+                }
+            }
 
-        function checkGuess() {
-            const guess = document.getElementById("guessInput").value.toLowerCase();
+            const words = ["apple", "banana", "orange", "grape", "kiwi"];
+            let targetWord, displayedWord, remainingHearts;
 
-            if (guess.length === 1 && targetWord.includes(guess)) {
-                displayedWord = [...displayedWord].map((char, index) =>
-                    targetWord[index] === guess ? guess : char
-                ).join("");
+            function newRound() {
+                const randomIndex = Math.floor(Math.random() * words.length);
+                targetWord = words[randomIndex].toLowerCase();
+                displayedWord = "_".repeat(targetWord.length);
+                remainingHearts = 9;
 
                 document.getElementById("wordContainer").innerHTML = displayedWord
                     .split("")
                     .map(letter => `<span class="letterStripe">${letter}</span>`)
                     .join("");
 
-                if (displayedWord === targetWord) {
-                    alert("Congratulations! You guessed the word!");
-                }
-            } else {
-                remainingHearts--;
-
                 updateHearts();
+                document.getElementById("guessInput").value = ""; // Clear the input field
+                document.getElementById("checkButton").disabled = false; // Enable the button
+            }
 
-                if (remainingHearts === 0) {
-                    alert("Game over! You ran out of hearts. The correct word was: " + targetWord);
+            function checkGuess() {
+                const guess = document.getElementById("guessInput").value.toLowerCase();
+
+                if (guess.length === 1 && targetWord.includes(guess)) {
+                    displayedWord = [...displayedWord].map((char, index) =>
+                        targetWord[index] === guess ? guess : char
+                    ).join("");
+
+                    document.getElementById("wordContainer").innerHTML = displayedWord
+                        .split("")
+                        .map(letter => `<span class="letterStripe">${letter}</span>`)
+                        .join("");
+
+                    if (displayedWord === targetWord) {
+                        alert("Congratulations! You guessed the word!");
+                        newRound(); // Start a new round after successful guess
+                    }
+                } else {
+                    remainingHearts--;
+
+                    updateHearts();
+                    wrongGuesses++;
+
+                    if (remainingHearts === 0 || wrongGuesses >= 9) {
+                        // Do something if needed
+                    }
                 }
             }
-        }
 
-        function updateHearts() {
-            const heartsContainer = document.getElementById("heartsContainer");
+            function updateHearts() {
+                const heartsContainer = document.getElementById("heartsContainer");
 
-            heartsContainer.innerHTML = "";
-            for (let i = 0; i < remainingHearts; i++) {
-                heartsContainer.innerHTML += '<span class="heart">♥</span>';
+                heartsContainer.innerHTML = "";
+                for (let i = 0; i < remainingHearts; i++) {
+                    heartsContainer.innerHTML += '<span class="heart">♥</span>';
+                }
             }
+
+            function startAgain() {
+                location.reload();
+            }
+        </script>
+
+    </header>
+
+    <!-- Add a background color and large text to the whole page -->
+    <div class="w3-sand w3-grayscale w3-large">
+
+        <!-- About Container -->
+        <div class="w3-container" id="about">
+            <div class="w3-content" style="max-width:700px">
+                <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">NOTEIKUMI</span></h5>
+                <p>Spēles mērķis ir izglābt kaķēnu. Kaķim ir tikai deviņas dzīvības, tāpēc tev ir īpaši prātīgi jāmin vārdi, jo pēc katra nepareiza minējuma viena dzīvība tiek zaudēta. Ja kaķim dzīvības ir beigušās, spēle jāsāk no jauna.</p>
+                <div class="w3-panel w3-leftbar w3-light-grey">
+                    <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
+                    <p>Chef, Coffeeist and Owner: Liam Brown</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Menu Container -->
+        <div class="w3-container" id="menu">
+            <div class="w3-content" style="max-width:700px">
+
+                <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">PAR MUMS</span></h5>
+
+                <div class="w3-row w3-center w3-card w3-padding">
+                    <a href="javascript:void(0)" onclick="openMenu(event, 'Eat');" id="myLink">
+                        <div class="w3-col s6 tablink">Kate</div>
+                    </a>
+                    <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
+                        <div class="w3-col s6 tablink">Jete</div>
+                    </a>
+                </div>
+
+                <div id="Eat" class="w3-container menu w3-padding-48 w3-card">
+
+                    <p class="w3-text-grey">Viena no spēles idejas autorēm, izstrādātājām</p><br>
+
+                    <h5>Izglītība</h5>
+                    <p class="w3-text-grey">Nepabeigta vidējā</p><br>
+
+                </div>
+
+                <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
+
+                    <p class="w3-text-grey">Otra spēles idejas autore, izstrādātāja</p><br>
+
+                    <h5>Izglītība</h5>
+                    <p class="w3-text-grey">Gandrīz vidējā</p><br>
+                </div>  
+
+            </div>
+        </div>
+
+        <!-- Contact/Area Container -->
+        <div class="w3-container" id="where" style="padding-bottom:32px;">
+            <div class="w3-content" style="max-width:700px">
+                <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Rezultāti</span></h5>
+                <p>Find us at some address at some place.</p>
+                <img src="/w3images/map.jpg" class="w3-image" style="width:100%">
+                <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
+                <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
+                <form action="/action_page.php" target="_blank">
+                    <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
+                    <p><input class="w3-input w3-padding-16 w3-border" type="number" placeholder="How many people" required name="People"></p>
+                    <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Date and time" required name="date" value="2020-11-16T20:00"></p>
+                    <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
+                    <p><button class="w3-button w3-black" type="submit">SEND MESSAGE</button></p>
+                </form>
+            </div>
+        </div>
+
+        <!-- End page content -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="w3-center w3-light-grey w3-padding-48 w3-large">
+        <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+    </footer>
+
+    <script>
+        // Tabbed Menu
+        function openMenu(evt, menuName) {
+            var i, x, tablinks;
+            x = document.getElementsByClassName("menu");
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < x.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
+            }
+            document.getElementById(menuName).style.display = "block";
+            evt.currentTarget.firstElementChild.className += " w3-dark-grey";
         }
-        
-        
-        
-        
-        
-   </script>
-  
-  </div>
-</header>
-
-<!-- Add a background color and large text to the whole page -->
-<div class="w3-sand w3-grayscale w3-large">
-
-<!-- About Container -->
-<div class="w3-container" id="about">
-  <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">NOTEIKUMI</span></h5>
-    <p>Spēles mērķis ir izglābt kaķēnu. Kaķim ir tikai deviņas dzīvības, tāpēc tev ir īpaši prātīgi jāmin vārdi, jo pēc katra nepareiza minējuma viena dzīvība tiek zaudēta. Ja kaķim dzīvības ir beigušās, spēle jāsāk no jauna.</p>
-    <div class="w3-panel w3-leftbar w3-light-grey">
-      <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
-      <p>Chef, Coffeeist and Owner: Liam Brown</p>
-    </div>
-    
-  </div>
-</div>
-
-
-
-
-
-<!-- Menu Container -->
-<div class="w3-container" id="menu">
-  <div class="w3-content" style="max-width:700px">
- 
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">PAR MUMS</span></h5>
-  
-    <div class="w3-row w3-center w3-card w3-padding">
-      <a href="javascript:void(0)" onclick="openMenu(event, 'Eat');" id="myLink">
-        <div class="w3-col s6 tablink">Kate</div>
-      </a>
-      <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
-        <div class="w3-col s6 tablink">Jete</div>
-      </a>
-    </div>
-
-    <div id="Eat" class="w3-container menu w3-padding-48 w3-card">
-      
-      <p class="w3-text-grey">Viena no spēles idejas autorēm, izstrādātājām</p><br>
-    
-      <h5>Izglītība</h5>
-      <p class="w3-text-grey">Nepabeigta vidējā</p><br>
-    
-    </div>
-
-    <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
-     
-      <p class="w3-text-grey">Otra spēles idejas autore, izstrādātāja</p><br>
-    
-      <h5>Izglītība</h5>
-      <p class="w3-text-grey">Gandrīz vidējā</p><br>
-    </div>  
-  
-</div>
-
-<!-- Contact/Area Container -->
-<div class="w3-container" id="where" style="padding-bottom:32px;">
-  <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Rezultāti</span></h5>
-    <p>Find us at some address at some place.</p>
-    <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
-    <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
-    <form action="/action_page.php" target="_blank">
-      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Name" required name="Name"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="number" placeholder="How many people" required name="People"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="datetime-local" placeholder="Date and time" required name="date" value="2020-11-16T20:00"></p>
-      <p><input class="w3-input w3-padding-16 w3-border" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
-      <p><button class="w3-button w3-black" type="submit">SEND MESSAGE</button></p>
-    </form>
-  </div>
-</div>
-
-<!-- End page content -->
-</div>
-
-<!-- Footer -->
-<footer class="w3-center w3-light-grey w3-padding-48 w3-large">
-  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
-</footer>
-
-<script>
-// Tabbed Menu
-function openMenu(evt, menuName) {
-  var i, x, tablinks;
-  x = document.getElementsByClassName("menu");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablink");
-  for (i = 0; i < x.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" w3-dark-grey", "");
-  }
-  document.getElementById(menuName).style.display = "block";
-  evt.currentTarget.firstElementChild.className += " w3-dark-grey";
-}
-document.getElementById("myLink").click();
-</script>
+        document.getElementById("myLink").click();
+    </script>
 
 </body>
 </html>
