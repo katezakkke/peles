@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html>
 <head>
 <title>W3.CSS Template</title>
@@ -9,9 +9,39 @@
 <style>
 body, html {
   height: 100%;
+  text-align: center;
+            margin: 20px;
+            margin-top: 100px;
   font-family: "Inconsolata", sans-serif;
 }
+#wordContainer {
+            font-size: 24px;
+            margin: 10px 0;
+        }
 
+        .letterStripe {
+            display: inline-block;
+            border-bottom: 2px solid black;
+            margin: 0 5px;
+            width: 20px; /* Adjust the width as needed */
+        }
+
+        #heartsContainer {
+            margin-top: 20px;
+        }
+
+        .heart {
+            color: red;
+            font-size: 24px;
+        }
+
+        
+
+        p {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 5px;
+        }
 .bgimg {
   background-position: center;
   background-size: cover;
@@ -24,36 +54,125 @@ body, html {
 }
 </style>
 </head>
-<body>
+<body onload="sakt()">
 
 <!-- Links (sit on top) -->
 <div class="w3-top">
   <div class="w3-row w3-padding w3-black">
     <div class="w3-col s3">
-      <a href="#" class="w3-button w3-block w3-black">HOME</a>
+      <a href="#" class="w3-button w3-block w3-black">SPĒLE</a>
     </div>
     <div class="w3-col s3">
-      <a href="#about" class="w3-button w3-block w3-black">ABOUT</a>
+      <a href="#about" class="w3-button w3-block w3-black">NOTEIKUMI</a>
     </div>
     <div class="w3-col s3">
-      <a href="#menu" class="w3-button w3-block w3-black">MENU</a>
+      <a href="#menu" class="w3-button w3-block w3-black">PAR MUMS</a>
     </div>
     <div class="w3-col s3">
-      <a href="#where" class="w3-button w3-block w3-black">WHERE</a>
+      <a href="#where" class="w3-button w3-block w3-black">REZULTĀTI</a>
     </div>
   </div>
 </div>
 
+
+
+
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-grayscale-min" id="home">
-  <div class="w3-display-bottomleft w3-center w3-padding-large w3-hide-small">
-    <span class="w3-tag">Open from 6am to 5pm</span>
-  </div>
-  <div class="w3-display-middle w3-center">
-    <span class="w3-text-white" style="font-size:90px">the<br>Cafe</span>
-  </div>
-  <div class="w3-display-bottomright w3-center w3-padding-large">
-    <span class="w3-text-white">15 Adr street, 5015</span>
+  
+    <h1>KAĶA DEVIŅAS DZĪVĪBAS</h1>
+
+    <p>MINAMAIS VĀRDS:</p>
+    <div id="wordContainer">
+        <!-- This is where the word will be displayed with stripes -->
+    </div>
+    <div id="heartsContainer">
+        <!-- Hearts will be dynamically added here -->
+    </div>
+    <br>
+    <label for="guessInput">TAVS MINĒJUMS:</label>
+    <input type="text" id="guessInput">
+    <button onclick="checkGuess()">PĀRBAUDĪT</button>
+
+    <p id="demo"></p>
+
+    <script>
+        var countDownDate, spele;
+
+        function sakt() {
+            countDownDate = new Date().getTime();
+            spele = setInterval(skaita, 1000);
+        }
+
+        function skaita() {
+            let now = new Date().getTime();
+            let distance = now - countDownDate;
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("demo").innerHTML = minutes + "m " + seconds + "s ";
+
+            if (distance > 5000000) {
+                clearInterval(spele);
+                document.getElementById("demo").innerHTML = "Laiks beidzies";
+            }
+        }
+
+        const words = ["apple", "banana", "orange", "grape", "kiwi"];
+        const randomIndex = Math.floor(Math.random() * words.length);
+        const targetWord = words[randomIndex].toLowerCase();
+        let displayedWord = "_".repeat(targetWord.length);
+        let remainingHearts = 9;
+
+        document.getElementById("wordContainer").innerHTML = displayedWord
+            .split("")
+            .map(letter => `<span class="letterStripe">${letter}</span>`)
+            .join("");
+
+        updateHearts();
+
+        function checkGuess() {
+            const guess = document.getElementById("guessInput").value.toLowerCase();
+
+            if (guess.length === 1 && targetWord.includes(guess)) {
+                displayedWord = [...displayedWord].map((char, index) =>
+                    targetWord[index] === guess ? guess : char
+                ).join("");
+
+                document.getElementById("wordContainer").innerHTML = displayedWord
+                    .split("")
+                    .map(letter => `<span class="letterStripe">${letter}</span>`)
+                    .join("");
+
+                if (displayedWord === targetWord) {
+                    alert("Congratulations! You guessed the word!");
+                }
+            } else {
+                remainingHearts--;
+
+                updateHearts();
+
+                if (remainingHearts === 0) {
+                    alert("Game over! You ran out of hearts. The correct word was: " + targetWord);
+                }
+            }
+        }
+
+        function updateHearts() {
+            const heartsContainer = document.getElementById("heartsContainer");
+
+            heartsContainer.innerHTML = "";
+            for (let i = 0; i < remainingHearts; i++) {
+                heartsContainer.innerHTML += '<span class="heart">♥</span>';
+            }
+        }
+        
+        
+        
+        
+        
+   </script>
+  
   </div>
 </header>
 
@@ -63,77 +182,59 @@ body, html {
 <!-- About Container -->
 <div class="w3-container" id="about">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">PAR MUMS</span></h5>
-    <p>Kate </p>
-    <p>In addition to our full espresso and brew bar menu, we serve fresh made-to-order breakfast and lunch sandwiches, as well as a selection of sides and salads and other good stuff.</p>
+    <h5 class="w3-center w3-padding-64"><span class="w3-tag w3-wide">NOTEIKUMI</span></h5>
+    <p>Spēles mērķis ir izglābt kaķēnu. Kaķim ir tikai deviņas dzīvības, tāpēc tev ir īpaši prātīgi jāmin vārdi, jo pēc katra nepareiza minējuma viena dzīvība tiek zaudēta. Ja kaķim dzīvības ir beigušās, spēle jāsāk no jauna.</p>
     <div class="w3-panel w3-leftbar w3-light-grey">
       <p><i>"Use products from nature for what it's worth - but never too early, nor too late." Fresh is the new sweet.</i></p>
       <p>Chef, Coffeeist and Owner: Liam Brown</p>
     </div>
-    <img src="/w3images/coffeeshop.jpg" style="width:100%;max-width:1000px" class="w3-margin-top">
-    <p><strong>Opening hours:</strong> everyday from 6am to 5pm.</p>
-    <p><strong>Address:</strong> 15 Adr street, 5015, NY</p>
+    
   </div>
 </div>
+
+
+
+
 
 <!-- Menu Container -->
 <div class="w3-container" id="menu">
   <div class="w3-content" style="max-width:700px">
  
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">THE MENU</span></h5>
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">PAR MUMS</span></h5>
   
     <div class="w3-row w3-center w3-card w3-padding">
       <a href="javascript:void(0)" onclick="openMenu(event, 'Eat');" id="myLink">
-        <div class="w3-col s6 tablink">Eat</div>
+        <div class="w3-col s6 tablink">Kate</div>
       </a>
       <a href="javascript:void(0)" onclick="openMenu(event, 'Drinks');">
-        <div class="w3-col s6 tablink">Drink</div>
+        <div class="w3-col s6 tablink">Jete</div>
       </a>
     </div>
 
     <div id="Eat" class="w3-container menu w3-padding-48 w3-card">
-      <h5>Bread Basket</h5>
-      <p class="w3-text-grey">Assortment of fresh baked fruit breads and muffins 5.50</p><br>
+      
+      <p class="w3-text-grey">Viena no spēles idejas autorēm, izstrādātājām</p><br>
     
-      <h5>Honey Almond Granola with Fruits</h5>
-      <p class="w3-text-grey">Natural cereal of honey toasted oats, raisins, almonds and dates 7.00</p><br>
+      <h5>Izglītība</h5>
+      <p class="w3-text-grey">Nepabeigta vidējā</p><br>
     
-      <h5>Belgian Waffle</h5>
-      <p class="w3-text-grey">Vanilla flavored batter with malted flour 7.50</p><br>
-    
-      <h5>Scrambled eggs</h5>
-      <p class="w3-text-grey">Scrambled eggs, roasted red pepper and garlic, with green onions 7.50</p><br>
-    
-      <h5>Blueberry Pancakes</h5>
-      <p class="w3-text-grey">With syrup, butter and lots of berries 8.50</p>
     </div>
 
     <div id="Drinks" class="w3-container menu w3-padding-48 w3-card">
-      <h5>Coffee</h5>
-      <p class="w3-text-grey">Regular coffee 2.50</p><br>
+     
+      <p class="w3-text-grey">Otra spēles idejas autore, izstrādātāja</p><br>
     
-      <h5>Chocolato</h5>
-      <p class="w3-text-grey">Chocolate espresso with milk 4.50</p><br>
-    
-      <h5>Corretto</h5>
-      <p class="w3-text-grey">Whiskey and coffee 5.00</p><br>
-    
-      <h5>Iced tea</h5>
-      <p class="w3-text-grey">Hot tea, except not hot 3.00</p><br>
-    
-      <h5>Soda</h5>
-      <p class="w3-text-grey">Coke, Sprite, Fanta, etc. 2.50</p>
+      <h5>Izglītība</h5>
+      <p class="w3-text-grey">Gandrīz vidējā</p><br>
     </div>  
-    <img src="/w3images/coffeehouse2.jpg" style="width:100%;max-width:1000px;margin-top:32px;">
-  </div>
+  
 </div>
 
 <!-- Contact/Area Container -->
 <div class="w3-container" id="where" style="padding-bottom:32px;">
   <div class="w3-content" style="max-width:700px">
-    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">WHERE TO FIND US</span></h5>
+    <h5 class="w3-center w3-padding-48"><span class="w3-tag w3-wide">Rezultāti</span></h5>
     <p>Find us at some address at some place.</p>
-    <img src="/w3images/map.jpg" class="w3-image" style="width:100%">
     <p><span class="w3-tag">FYI!</span> We offer full-service catering for any event, large or small. We understand your needs and we will cater the food to satisfy the biggerst criteria of them all, both look and taste.</p>
     <p><strong>Reserve</strong> a table, ask for today's special or just send us a message:</p>
     <form action="/action_page.php" target="_blank">
